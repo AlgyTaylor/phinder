@@ -13,8 +13,11 @@ class API
         foreach ($phpParser->parse($phpPath) as $xml) {
             foreach ($rules as $rule) {
                 foreach ($xml->xpath($rule->xpath) as $match) {
-                    $elem = static::_getActualElement($match);
-                    yield new Match($xml['path'], $elem, $rule);
+                    $path = $xml['path'];
+                    if (!$rule->ignore($path)) {
+                        $elem = static::_getActualElement($match);
+                        yield new Match($path, $elem, $rule);
+                    }
                 }
             }
         }

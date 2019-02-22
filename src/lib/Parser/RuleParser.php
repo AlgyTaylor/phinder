@@ -70,6 +70,7 @@ final class RuleParser extends FileParser
         $test = $arr['test'] ?? [];
         $pass = $test['pass'] ?? [];
         $fail = $test['fail'] ?? [];
+        $ignore = $arr['ignore'] ?? [];
 
         if (!\is_string($id)) {
             throw new InvalidRule('id');
@@ -95,14 +96,27 @@ final class RuleParser extends FileParser
             throw new InvalidRule('test.fail');
         }
 
+        if (!\is_string($ignore) && !\is_array($ignore)) {
+            throw new InvalidRule('ignore');
+        }
+
         $pats = \is_array($pattern)? $pattern : [$pattern];
         $jsts = \is_array($justification)? $justification : [$justification];
         $ppats = \is_array($pass)? $pass : [$pass];
         $fpats = \is_array($fail)? $fail : [$fail];
+        $ignore_patterns = \is_array($ignore)? $ignore : [$ignore];
 
         try {
             foreach ($this->_patternParser->parse($pats) as $xpath) {
-                yield new Rule($id, $xpath, $message, $jsts, $ppats, $fpats);
+                yield new Rule(
+                    $id,
+                    $xpath,
+                    $message,
+                    $jsts,
+                    $ppats,
+                    $fpats,
+                    $ignore_patterns
+                );
             }
         } catch (InvalidPattern $e) {
             $e->id = $id;
