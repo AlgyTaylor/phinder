@@ -1,0 +1,4 @@
+- id: sample4
+  pattern: func(...)
+  message: message
+  ignore: '**/sample2.php'
