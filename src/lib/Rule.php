@@ -2,13 +2,11 @@
 
 namespace Phinder;
 
-use Phinder\Error\InvalidRule;
 use Webmozart\Glob\Glob;
 use function Funct\Strings\startsWith;
 
 final class Rule
 {
-
     public $id;
 
     public $xpath;
@@ -50,7 +48,7 @@ final class Rule
                 return true;
             }
         }
+
         return false;
     }
-
 }
